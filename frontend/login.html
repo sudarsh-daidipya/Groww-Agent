@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login • Algo Trader Terminal</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <style>
+    body {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; background: radial-gradient(circle at top, #1e293b, #0b0f19 70%);
+    }
+    .login-card {
+      width: 100%; max-width: 390px; background: #111827;
+      border: 1px solid #1f2937; border-radius: 12px; padding: 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+    .login-header { text-align: center; margin-bottom: 22px; }
+    .login-header h1 { font-size: 20px; color: #f8fafc; letter-spacing: 0.5px; }
+    .login-header p { font-size: 12.5px; color: #94a3b8; margin-top: 6px; }
+    .login-form { display: flex; flex-direction: column; gap: 14px; }
+    .login-form label { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: #cbd5e1; }
+    .login-form input {
+      padding: 10px 12px; font-size: 14px; background: #0b0f19;
+      border: 1px solid #374151; border-radius: 6px; color: #fff;
+    }
+    .login-form input:focus { outline: none; border-color: #3b82f6; }
+    .error-msg {
+      background: #7f1d1d; color: #fca5a5; padding: 8px 10px;
+      border-radius: 6px; font-size: 12.5px; text-align: center; display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <div class="login-header">
+      <h1>⚡ ALGO TRADER TERMINAL</h1>
+      <p>Sign in to access NIFTY & MCX Bot Controls</p>
+    </div>
+
+    <div id="err-box" class="error-msg">Invalid credentials</div>
+
+    <form class="login-form" onsubmit="handleLogin(event)">
+      <label>Username
+        <input type="text" id="username" placeholder="Enter username" required autofocus />
+      </label>
+      <label>Password
+        <input type="password" id="password" placeholder="Enter password" required />
+      </label>
+      <button type="submit" class="btn primary full-btn" style="padding: 10px; font-size: 14px;">
+        🔒 Unlock Terminal
+      </button>
+    </form>
+  </div>
+
+  <script>
+    async function handleLogin(e) {
+      e.preventDefault();
+      const errBox = document.getElementById("err-box");
+      errBox.style.display = "none";
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+        if (res.ok) {
+          window.location.href = "/";
+        } else {
+          errBox.textContent = "Invalid username or password!";
+          errBox.style.display = "block";
+        }
+      } catch (err) {
+        errBox.textContent = "Server error. Please try again.";
+        errBox.style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>
