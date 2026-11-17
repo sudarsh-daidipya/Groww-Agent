@@ -17,19 +17,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Login session middleware
 app.add_middleware(SessionMiddleware, secret_key=settings.APP_SECRET_KEY, max_age=86400)
 
 init_db()
 
 def require_auth(request: Request):
     if not request.session.get("authenticated"):
-        raise HTTPException(status_code=401, detail="Unauthorized. Please login first.")
+        raise HTTPException(status_code=401, detail="Unauthorized. Please sign in with Google.")
 
-# Public Auth Route
 app.include_router(auth.router)
-
-# Protected API Routes (Only accessible after login)
 app.include_router(market.router, dependencies=[Depends(require_auth)])
 app.include_router(signals.router, dependencies=[Depends(require_auth)])
 app.include_router(bot.router, dependencies=[Depends(require_auth)])

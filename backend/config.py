@@ -11,10 +11,15 @@ DB_PATH = BASE_DIR / "data" / "trades.db"
 LOG_DIR = BASE_DIR / "data" / "logs"
 
 class Settings:
-    # Dashboard Auth Credentials
-    APP_USERNAME: str = os.getenv("APP_USERNAME", "admin")
-    APP_PASSWORD: str = os.getenv("APP_PASSWORD", "kaash123")
-    APP_SECRET_KEY: str = os.getenv("APP_SECRET_KEY", "super_secret_algo_session_key_2026")
+    # Google OAuth & Session Settings
+    GOOGLE_CLIENT_ID: str = os.getenv(
+        "GOOGLE_CLIENT_ID",
+        "458048900570-n8u3gvfgo4pdcdomam4pt0sau6akpmoe.apps.googleusercontent.com",
+    )
+    ALLOWED_EMAILS: list[str] = [
+        e.strip().lower() for e in os.getenv("ALLOWED_EMAILS", "").split(",") if e.strip()
+    ]
+    APP_SECRET_KEY: str = os.getenv("APP_SECRET_KEY", "groww_algo_super_secret_session_key_2026")
 
     # Groww Official Credentials
     GROWW_ACCESS_TOKEN: str = os.getenv("GROWW_ACCESS_TOKEN") or os.getenv("GROWW_API_TOKEN", "")
